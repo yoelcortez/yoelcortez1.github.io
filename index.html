@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nivelación Geométrica Cerrada Profesional</title>
+  <style>
+    :root {
+      --primary: #1e3a8a;
+      --secondary: #2563eb;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #cbd5e1;
+      --success: #15803d;
+      --danger: #b91c1c;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: #334155;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1150px;
+      margin: 0 auto;
+      background-color: var(--card-bg);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: var(--primary);
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 1.5em;
+    }
+
+    .section {
+      margin-bottom: 25px;
+      padding: 15px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-title {
+      font-weight: bold;
+      color: var(--primary);
+      font-size: 1.1em;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-action {
+      padding: 6px 12px;
+      background-color: #475569;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 0.85em;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn-action:hover {
+      background-color: #334155;
+    }
+
+    .btn-copy { background-color: #0284c7; }
+    .btn-copy:hover { background-color: #0369a1; }
+    .btn-csv { background-color: #16a34a; }
+    .btn-csv:hover { background-color: #15803d; }
+
+    .grid-inputs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 15px;
+      align-items: center;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .input-group label {
+      font-size: 0.9em;
+      margin-bottom: 5px;
+      color: #475569;
+      font-weight: 600;
+    }
+
+    .input-group input {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    /* Switch de 2 posiciones */
+    .switch-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .switch-label-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 5px;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 26px;
+    }
+
+    .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #cbd5e1;
+      transition: .3s;
+      border-radius: 26px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--secondary);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(24px);
+    }
+
+    .switch-status {
+      font-size: 0.9em;
+      font-weight: bold;
+      color: #64748b;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      min-width: 750px;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 8px;
+      text-align: center;
+      font-size: 0.9em;
+    }
+
+    th {
+      background-color: #f1f5f9;
+      color: var(--primary);
+    }
+
+    input[type="number"], input[type="text"] {
+      width: 90%;
+      padding: 6px;
+      text-align: center;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.95em;
+    }
+
+    input:disabled {
+      background-color: #e2e8f0;
+      color: #334155;
+      font-weight: bold;
+    }
+
+    .col-compensada {
+      background-color: #ecfdf5;
+      color: #065f46;
+      font-weight: bold;
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    .btn-container {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 10px;
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.95em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    .btn:hover {
+      background-color: var(--primary);
+    }
+
+    .btn-danger-row {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.85em;
+    }
+
+    .btn-danger-row:hover {
+      background-color: #dc2626;
+    }
+
+    .btn-add {
+      background-color: #10b981;
+    }
+    .btn-add:hover {
+      background-color: #059669;
+    }
+
+    .results {
+      background-color: #f8fafc;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .result-item {
+      margin: 8px 0;
+      font-size: 1em;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      color: white;
+    }
+
+    .badge-success { background-color: var(--success); }
+    .badge-danger { background-color: var(--danger); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Calculadora de Nivelación Geométrica Cerrada</h1>
+  
+  <!-- 1. Parámetros Iniciales -->
+  <div class="section">
+    <div class="section-title" style="margin-bottom: 12px;">1. Parámetros Iniciales y Opciones</div>
+    <div class="grid-inputs">
+      <div class="input-group">
+        <label for="cotaInicio">Cota de Inicio BM-1 (m):</label>
+        <input type="number" id="cotaInicio" value="100.000" step="0.001" oninput="calcularNivelacion()">
+      </div>
+      <div class="input-group" id="groupDistTotal">
+        <label for="longitudManual">Distancia Total / Perímetro (m):</label>
+        <input type="number" id="longitudManual" value="500" step="1" oninput="calcularNivelacion()">
+      </div>
+      <div class="input-group">
+        <label for="kFactor">Factor de Tolerancia (k):</label>
+        <input type="number" id="kFactor" value="0.02" step="0.001" oninput="calcularNivelacion()">
+      </div>
+      <!-- Switch de 2 posiciones -->
+      <div class="switch-container">
+        <label>Compensación por Distancia:</label>
+        <div class="switch-label-wrapper">
+          <label class="switch">
+            <input type="checkbox" id="toggleCompensacion" onchange="alternarCompensacion()">
+            <span class="slider"></span>
+          </label>
+          <span id="txtEstadoSwitch" class="switch-status">DESACTIVADO</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Libreta de Campo -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-title">2. Libreta de Campo</div>
+      <div class="action-buttons">
+        <button class="btn-action btn-copy" onclick="copiarAlPortapapeles()">📋 Copiar Libreta</button>
+        <button class="btn-action btn-csv" onclick="exportarCSV()">📥 Exportar CSV</button>
+      </div>
+    </div>
+    <div class="table-container">
+      <table id="tablaNivelacion">
+        <thead>
+          <tr>
+            <th>Punto</th>
+            <th class="th-dist oculto">Dist. Parcial (m)</th>
+            <th class="th-dist oculto">Dist. Acum. (m)</th>
+            <th>Vista Atrás L(+)</th>
+            <th>HI (m)</th>
+            <th>Vista Adelante L(-)</th>
+            <th>Cota Calc. (m)</th>
+            <th class="th-comp oculto">Corr. (m)</th>
+            <th class="th-comp oculto">Cota Comp. (m)</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTabla">
+          <!-- Dinámico -->
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-container">
+      <button class="btn btn-add" onclick="agregarFila()">+ Agregar Punto / Fila</button>
+      <button class="btn" onclick="calcularNivelacion()">Procesar Nivelación</button>
+    </div>
+  </div>
+
+  <!-- 3. Control Altimétrico -->
+  <div class="section results" id="seccionResultados">
+    <div class="section-title" style="margin-bottom: 12px;">3. Control Altimétrico</div>
+    
+    <div class="result-item"><strong>Distancia Total del Circuito:</strong> <span id="resDistTotal">0.00</span> m</div>
+    <div class="result-item"><strong>Suma de Vistas Atrás ∑L(+):</strong> <span id="resSumPlus">0.000</span> m</div>
+    <div class="result-item"><strong>Suma de Vistas Adelante ∑L(-):</strong> <span id="resSumMinus">0.000</span> m</div>
+    <div class="result-item"><strong>Cota Final Calculada:</strong> <span id="resCotaFinalCalc">0.000</span> m</div>
+    <div class="result-item"><strong>Error de Cierre (Ec):</strong> <span id="resErrorCierre">0.000</span> m</div>
+    <div class="result-item"><strong>Error Máximo Tolerable (E_max):</strong> <span id="resErrorMax">0.000</span> m</div>
+    <hr style="margin: 12px 0; border: 0; border-top: 1px solid var(--border);">
+    <div class="result-item"><strong>Dictamen de Precisión:</strong> <span id="resDictamen">-</span></div>
+  </div>
+</div>
+
+<script>
+  let filasData = [
+    { punto: "BM-1", dist: "0",   atras: "1.524", adelante: "" },
+    { punto: "PC-1", dist: "120", atras: "1.632", adelante: "1.102" },
+    { punto: "PC-2", dist: "150", atras: "1.415", adelante: "1.845" },
+    { punto: "BM-1", dist: "230", atras: "",      adelante: "1.618" }
+  ];
+
+  function alternarCompensacion() {
+    renderizarTabla();
+  }
+
+  function renderizarTabla() {
+    const tbody = document.getElementById('cuerpoTabla');
+    tbody.innerHTML = '';
+
+    const activarCompensacion = document.getElementById('toggleCompensacion').checked;
+    const txtEstado = document.getElementById('txtEstadoSwitch');
+    const groupDistTotal = document.getElementById('groupDistTotal');
+
+    if (activarCompensacion) {
+      txtEstado.innerText = "ACTIVADO";
+      txtEstado.style.color = "var(--secondary)";
+      groupDistTotal.classList.add('oculto');
+    } else {
+      txtEstado.innerText = "DESACTIVADO";
+      txtEstado.style.color = "#64748b";
+      groupDistTotal.classList.remove('oculto');
+    }
+
+    document.querySelectorAll('.th-dist, .th-comp').forEach(th => {
+      if (activarCompensacion) th.classList.remove('oculto');
+      else th.classList.add('oculto');
+    });
+
+    filasData.forEach((fila, index) => {
+      const tr = document.createElement('tr');
+      const esPrimero = (index === 0);
+
+      tr.innerHTML = `
+        <td><input type="text" value="${fila.punto}" onchange="actualizarDato(${index}, 'punto', this.value)"></td>
+        <td class="td-dist ${activarCompensacion ? '' : 'oculto'}">${esPrimero ? '-' : `<input type="number" step="0.1" class="val-dist" value="${fila.dist}" oninput="actualizarDato(${index}, 'dist', this.value)">`}</td>
+        <td class="td-dist ${activarCompensacion ? '' : 'oculto'}"><input type="text" class="val-dist-acum" disabled value="0.00"></td>
+        <td><input type="number" step="0.001" class="val-atras" value="${fila.atras}" oninput="actualizarDato(${index}, 'atras', this.value)"></td>
+        <td><input type="text" class="val-hi" disabled value="-"></td>
+        <td>${esPrimero ? '-' : `<input type="number" step="0.001" class="val-adelante" value="${fila.adelante}" oninput="actualizarDato(${index}, 'adelante', this.value)">`}</td>
+        <td><input type="text" class="val-cota" disabled value="-"></td>
+        <td class="td-comp ${activarCompensacion ? '' : 'oculto'}"><input type="text" class="val-corr" disabled value="-"></td>
+        <td class="td-comp ${activarCompensacion ? '' : 'oculto'}"><input type="text" class="col-compensada val-cota-comp" disabled value="-"></td>
+        <td>${filasData.length > 1 ? `<button class="btn-danger-row" onclick="eliminarFila(${index})">Eliminar</button>` : '-'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    calcularNivelacion();
+  }
+
+  function actualizarDato(index, campo, valor) {
+    filasData[index][campo] = valor;
+    calcularNivelacion();
+  }
+
+  function agregarFila() {
+    const num = filasData.length;
+    filasData.push({ punto: `PC-${num}`, dist: "100", atras: "", adelante: "" });
+    renderizarTabla();
+  }
+
+  function eliminarFila(index) {
+    if (filasData.length <= 1) return;
+    filasData.splice(index, 1);
+    renderizarTabla();
+  }
+
+  function calcularNivelacion() {
+    const cotaInicio = parseFloat(document.getElementById('cotaInicio').value) || 0;
+    const kFactor = parseFloat(document.getElementById('kFactor').value) || 0;
+    const activarCompensacion = document.getElementById('toggleCompensacion').checked;
+
+    const trs = document.querySelectorAll('#cuerpoTabla tr');
+    
+    let sumPlus = 0;
+    let sumMinus = 0;
+    let hiActual = null;
+    let cotaActual = cotaInicio;
+    
+    let distAcumulada = 0;
+    let distanciasAcumuladas = [0];
+    let cotasCalculadas = [];
+
+    trs.forEach((tr, index) => {
+      const inputDist = tr.querySelector('.val-dist');
+      const inputDistAcum = tr.querySelector('.val-dist-acum');
+      const inputAtras = tr.querySelector('.val-atras');
+      const inputAdelante = tr.querySelector('.val-adelante');
+      const inputHI = tr.querySelector('.val-hi');
+      const inputCota = tr.querySelector('.val-cota');
+
+      const valDist = inputDist && inputDist.value !== "" ? parseFloat(inputDist.value) : 0;
+      const valAtras = inputAtras && inputAtras.value !== "" ? parseFloat(inputAtras.value) : NaN;
+      const valAdelante = inputAdelante && inputAdelante.value !== "" ? parseFloat(inputAdelante.value) : NaN;
+
+      if (index > 0) {
+        distAcumulada += valDist;
+        distanciasAcumuladas.push(distAcumulada);
+        if (inputDistAcum) inputDistAcum.value = distAcumulada.toFixed(2);
+      } else {
+        if (inputDistAcum) inputDistAcum.value = "0.00";
+      }
+
+      if (!isNaN(valAtras)) sumPlus += valAtras;
+      if (!isNaN(valAdelante)) sumMinus += valAdelante;
+
+      if (index === 0) {
+        cotaActual = cotaInicio;
+        inputCota.value = cotaActual.toFixed(3);
+        cotasCalculadas.push(cotaActual);
+
+        if (!isNaN(valAtras)) {
+          hiActual = cotaInicio + valAtras;
+          inputHI.value = hiActual.toFixed(3);
+        } else {
+          inputHI.value = "-";
+        }
+      } else {
+        if (!isNaN(valAdelante) && hiActual !== null) {
+          cotaActual = hiActual - valAdelante;
+          inputCota.value = cotaActual.toFixed(3);
+        } else {
+          inputCota.value = "-";
+        }
+        cotasCalculadas.push(cotaActual);
+
+        if (!isNaN(valAtras) && inputCota.value !== "-") {
+          hiActual = cotaActual + valAtras;
+          inputHI.value = hiActual.toFixed(3);
+        } else {
+          inputHI.value = "-";
+        }
+      }
+    });
+
+    const cotaFinalCalculada = cotaActual;
+    const errorCierre = cotaFinalCalculada - cotaInicio; 
+
+    let distTotal = activarCompensacion ? distAcumulada : (parseFloat(document.getElementById('longitudManual').value) || 0);
+
+    if (activarCompensacion) {
+      trs.forEach((tr, index) => {
+        const inputCorr = tr.querySelector('.val-corr');
+        const inputCotaComp = tr.querySelector('.val-cota-comp');
+
+        if (index === 0) {
+          if (inputCorr) inputCorr.value = "0.000";
+          if (inputCotaComp) inputCotaComp.value = cotaInicio.toFixed(3);
+        } else {
+          let correccion = 0;
+          if (distTotal > 0) {
+            correccion = - (errorCierre * (distanciasAcumuladas[index] / distTotal));
+          }
+          let cotaCompensada = cotasCalculadas[index] + correccion;
+
+          if (inputCorr) inputCorr.value = correccion.toFixed(3);
+          if (inputCotaComp) inputCotaComp.value = cotaCompensada.toFixed(3);
+        }
+      });
+    }
+
+    const distKm = distTotal / 1000;
+    const errorMax = kFactor * Math.sqrt(distKm);
+
+    document.getElementById('resDistTotal').innerText = distTotal.toFixed(2);
+    document.getElementById('resSumPlus').innerText = sumPlus.toFixed(3);
+    document.getElementById('resSumMinus').innerText = sumMinus.toFixed(3);
+    document.getElementById('resCotaFinalCalc').innerText = cotaFinalCalculada.toFixed(3);
+    document.getElementById('resErrorCierre').innerText = errorCierre.toFixed(3);
+    document.getElementById('resErrorMax').innerText = errorMax.toFixed(3);
+
+    const elDictamen = document.getElementById('resDictamen');
+    if (distTotal === 0) {
+      elDictamen.innerHTML = '<span class="badge badge-danger">Ingrese la distancia total del circuito</span>';
+    } else if (Math.abs(errorCierre) <= errorMax) {
+      elDictamen.innerHTML = activarCompensacion 
+        ? '<span class="badge badge-success">ACEPTABLE (Con Compensación por Distancia)</span>'
+        : '<span class="badge badge-success">ACEPTABLE (Sin Compensación - Cotas Brutas)</span>';
+    } else {
+      elDictamen.innerHTML = '<span class="badge badge-danger">NO ACEPTABLE (Excede tolerancia)</span>';
+    }
+  }
+
+  // --- Función de Copiar con el mismo encabezado que el CSV ---
+  function copiarAlPortapapeles() {
+    const trs = document.querySelectorAll('#cuerpoTabla tr');
+    const activarCompensacion = document.getElementById('toggleCompensacion').checked;
+    
+    let texto = "";
+    
+    if (activarCompensacion) {
+      texto += "Punto\tDistancia_Parcial\tDistancia_Acumulada\tVista_Atras\tAltura_Instrumento\tVista_Adelante\tCota_Calculada\tCorreccion\tCota_Compensada\n";
+    } else {
+      texto += "Punto\tVista_Atras\tAltura_Instrumento\tVista_Adelante\tCota_Calculada\n";
+    }
+
+    trs.forEach((tr) => {
+      const pto = tr.querySelector('td:nth-child(1) input').value;
+      const atras = tr.querySelector('.val-atras').value || "";
+      const hi = tr.querySelector('.val-hi').value;
+      const adelante = tr.querySelector('.val-adelante') ? tr.querySelector('.val-adelante').value || "" : "";
+      const cota = tr.querySelector('.val-cota').value;
+
+      if (activarCompensacion) {
+        const dist = tr.querySelector('.val-dist') ? tr.querySelector('.val-dist').value : "0";
+        const distAcum = tr.querySelector('.val-dist-acum').value;
+        const corr = tr.querySelector('.val-corr').value;
+        const cotaComp = tr.querySelector('.val-cota-comp').value;
+        texto += `${pto}\t${dist}\t${distAcum}\t${atras}\t${hi}\t${adelante}\t${cota}\t${corr}\t${cotaComp}\n`;
+      } else {
+        texto += `${pto}\t${atras}\t${hi}\t${adelante}\t${cota}\n`;
+      }
+    });
+
+    navigator.clipboard.writeText(texto).then(() => {
+      alert("¡Datos copiados al portapapeles en formato de tabla!");
+    }).catch(err => {
+      alert("Error al copiar al portapapeles.");
+    });
+  }
+
+  // --- Función de Exportar CSV ---
+  function exportarCSV() {
+    const trs = document.querySelectorAll('#cuerpoTabla tr');
+    const activarCompensacion = document.getElementById('toggleCompensacion').checked;
+    
+    let csvContent = "data:text/csv;charset=utf-8,";
+    
+    if (activarCompensacion) {
+      csvContent += "Punto,Distancia_Parcial,Distancia_Acumulada,Vista_Atras,Altura_Instrumento,Vista_Adelante,Cota_Calculada,Correccion,Cota_Compensada\n";
+    } else {
+      csvContent += "Punto,Vista_Atras,Altura_Instrumento,Vista_Adelante,Cota_Calculada\n";
+    }
+
+    trs.forEach((tr) => {
+      const pto = tr.querySelector('td:nth-child(1) input').value;
+      const atras = tr.querySelector('.val-atras').value || "";
+      const hi = tr.querySelector('.val-hi').value;
+      const adelante = tr.querySelector('.val-adelante') ? tr.querySelector('.val-adelante').value || "" : "";
+      const cota = tr.querySelector('.val-cota').value;
+
+      if (activarCompensacion) {
+        const dist = tr.querySelector('.val-dist') ? tr.querySelector('.val-dist').value : "0";
+        const distAcum = tr.querySelector('.val-dist-acum').value;
+        const corr = tr.querySelector('.val-corr').value;
+        const cotaComp = tr.querySelector('.val-cota-comp').value;
+        csvContent += `${pto},${dist},${distAcum},${atras},${hi},${adelante},${cota},${corr},${cotaComp}\n`;
+      } else {
+        csvContent += `${pto},${atras},${hi},${adelante},${cota}\n`;
+      }
+    });
+
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "libreta_nivelacion.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  window.onload = renderizarTabla;
+</script>
+
+</body>
+</html>
